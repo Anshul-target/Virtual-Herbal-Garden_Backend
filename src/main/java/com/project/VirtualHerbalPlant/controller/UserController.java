@@ -32,7 +32,7 @@ public class UserController {
     );
     private final MedicinalPlantService plantService;
     @Operation(
-            summary = "Get all medicinal plants with optional filters"
+            summary = "Get all medicinal plants with pagination"
 
     )
    @GetMapping("/all")

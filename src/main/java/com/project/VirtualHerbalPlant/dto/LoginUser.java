@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class LoginUser {
     @NotBlank(message = "Enter the email")
-    @Schema(example = "anshul@2004")
+    @Schema(example = "anshul@2002.com")
     private String email;
     @NotBlank(message = "Enter the password")
     @Schema(example = "Anshul@123")
