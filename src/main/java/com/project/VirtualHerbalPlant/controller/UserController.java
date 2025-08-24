@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @RestController
+@PreAuthorize("hasRole('USER')")
 @RequestMapping("/api/plants")
 @Tag(name = "User Api", description = "Endpoints for user related operation")
 @SecurityRequirement(name = "bearerAuth")
@@ -29,6 +31,15 @@ public class UserController {
             "traditionalUse", "modernResearchStatus"
     );
     private final MedicinalPlantService plantService;
+    @Operation(
+            summary = "Get all medicinal plants with optional filters"
+
+    )
+   @GetMapping("/all")
+    public ResponseEntity<?> getAllPlants(@RequestParam("pageNo")int pageNo,@RequestParam("size")int size) {
+
+        return ResponseEntity.ok().body(plantService.getAllPlants(pageNo,size).getContent());
+    }
     @Operation(
             summary = "Get all medicinal plants with optional filters",
             description = "Retrieves all medicinal plants from the database. " +

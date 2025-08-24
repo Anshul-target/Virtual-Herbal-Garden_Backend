@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -175,6 +177,11 @@ public List<MedicinalPlant> getPlantsByFilters(Map<String, String> filters) {
     public boolean deleteAllPlant() {
      plantRepository.deleteAll();
         return true;
+    }
+
+    public Page<MedicinalPlantdto> getAllPlants(int pageNo, int size) {
+        PageRequest pageRequest=PageRequest.of(pageNo,size);
+        return plantRepository.findAll(pageRequest).map(MedicinalPlantdto::toDto);
     }
 }
 
