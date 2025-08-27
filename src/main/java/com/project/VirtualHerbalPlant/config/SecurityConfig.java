@@ -53,7 +53,7 @@ public class SecurityConfig {
 
         // Allow your Railway deployment URL and common development origins
         configuration.setAllowedOriginPatterns(Arrays.asList(
-                "https://virtual-herbal-gardenbackend-production.up.railway.app",
+                "https://virtual-herbal-gardenbackend-production.up.railway.app/",
                 "http://localhost:*",
                 "https://localhost:*",
                 "*"
