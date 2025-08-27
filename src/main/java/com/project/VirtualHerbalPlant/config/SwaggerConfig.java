@@ -15,7 +15,8 @@ import org.springframework.context.annotation.Configuration;
                 description = "This is the api documentation for the virtual herbal plant"
         ),
         servers = {
-                @Server(url = "http://localhost:8082", description = "Local Server")
+//                @Server(url = "http://localhost:8082", description = "Local Server")
+                @Server(url = "https://virtual-herbal-gardenbackend-production.up.railway.app", description = "Production Server")
         }
 )
 @SecurityScheme(
