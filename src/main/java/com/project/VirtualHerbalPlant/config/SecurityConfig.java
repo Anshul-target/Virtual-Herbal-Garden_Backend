@@ -54,9 +54,8 @@ public class SecurityConfig {
         // Allow your Railway deployment URL and common development origins
         configuration.setAllowedOriginPatterns(Arrays.asList(
                 "https://virtual-herbal-gardenbackend-production.up.railway.app",
-                "http://localhost:*",
-                "https://localhost:*",
-                "*"
+                "http://localhost:8082"
+
         ));
 
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD"));
