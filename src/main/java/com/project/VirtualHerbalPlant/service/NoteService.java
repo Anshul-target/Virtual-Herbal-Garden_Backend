@@ -45,6 +45,7 @@ public class NoteService {
 
     public List<NoteReplydto> getNotesByUserId(ObjectId userId) {
         List<Note> byUserId = noteRepository.findByUserId(userId);
+
         List<NoteReplydto> noteReplydtos = byUserId.stream().map(NoteReplydto::fromEntity).toList();
  return noteReplydtos;
     }
@@ -56,6 +57,8 @@ public class NoteService {
                     note.setUpdatedAt(LocalDateTime.now().toString());
                     return noteRepository.save(note);
                 }).orElse(null);
+        if (note1==null)
+            return  null;
        return NoteReplydto.fromEntity(note1);
 
     }

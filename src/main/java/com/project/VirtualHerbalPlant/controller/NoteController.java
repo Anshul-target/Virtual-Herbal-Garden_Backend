@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.bson.types.ObjectId;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +28,7 @@ public class NoteController {
         this.noteService = noteService;
     }
     @Operation(summary = "To create the note")
-    @PostMapping("{plantId}")
+    @PostMapping(value = "{plantId}",produces = MediaType.APPLICATION_JSON_VALUE,consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<NoteReplydto> createNote(
             @PathVariable("plantId")String plantId,
             @RequestBody Notedto note
@@ -43,15 +44,16 @@ public class NoteController {
     }
     @Operation(summary = "Get note by userId")
     @GetMapping("/user/{userId}")
-    public List<NoteReplydto> getNotesByUser(@PathVariable("userId") String userId) {
-        return noteService.getNotesByUserId(new ObjectId(userId));
+    public ResponseEntity<?> getNotesByUser(@PathVariable("userId") String userId) {
+        List<NoteReplydto> notesByUserId = noteService.getNotesByUserId(new ObjectId(userId));
+   return ResponseEntity.ok(notesByUserId);
     }
     @Operation(summary = "To update the note")
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateNote(@PathVariable("id") String id, @RequestBody String content) {
-      if (content.isEmpty())
+    public ResponseEntity<?> updateNote(@PathVariable("id") String id, @RequestBody Notedto content) {
+      if (content.getContent().isEmpty())
           return ResponseEntity.badRequest().body("Provide the content");
-        NoteReplydto updated = noteService.updateNote(new ObjectId(id), content);
+        NoteReplydto updated = noteService.updateNote(new ObjectId(id), content.getContent());
         if (updated != null) return ResponseEntity.ok(updated);
         return ResponseEntity.notFound().build();
     }

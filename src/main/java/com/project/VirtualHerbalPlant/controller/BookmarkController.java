@@ -1,4 +1,5 @@
 package com.project.VirtualHerbalPlant.controller;
+import com.project.VirtualHerbalPlant.config.UserPrincipal;
 import com.project.VirtualHerbalPlant.dto.Bookmarkdto;
 import com.project.VirtualHerbalPlant.entity.Bookmark;
 import com.project.VirtualHerbalPlant.service.BookmarkService;
@@ -8,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.bson.types.ObjectId;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 @PreAuthorize("hasRole('USER')")
@@ -17,15 +19,17 @@ import java.util.List;
 @RequestMapping("/api/bookmarks")
 public class BookmarkController {
     private final BookmarkService bookmarkService;
+
     public BookmarkController(BookmarkService bookmarkService) {
         this.bookmarkService = bookmarkService;
     }
 
   @Operation(summary = "To add the bookmark")
-    @PostMapping
-    public ResponseEntity<Bookmarkdto> addBookmark(@PathVariable("plantId")String pId,@PathVariable("userId") String uId) {
+    @PostMapping("/{plantId}")
+    public ResponseEntity<Bookmarkdto> addBookmark(@PathVariable("plantId")String pId) {
        ObjectId plantId=new ObjectId(pId);
-        ObjectId userId=new ObjectId(uId);
+      UserPrincipal principal = (UserPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+      ObjectId userId=new ObjectId(principal.getId());
         Bookmark bookmark=new Bookmark();
         bookmark.setUserId(userId);
         bookmark.setPlantId(plantId);
@@ -34,12 +38,19 @@ public class BookmarkController {
         return ResponseEntity.ok(bookmarkdto);
     }
 
+
     @Operation(summary = "To get the bookmark")
     @GetMapping("/{id}")
     public ResponseEntity<Bookmarkdto> getBookmark(@PathVariable String id) {
         return bookmarkService.getBookmarkById(new ObjectId(id))
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllBookmarks(@RequestParam("pageNo")int pageNo,@RequestParam("size")int size) {
+
+        return ResponseEntity.ok().body(bookmarkService.getAllPlants(pageNo,size).getContent());
     }
     @Operation(summary = "To get the bookmark by user")
     @GetMapping("/user/{userId}")

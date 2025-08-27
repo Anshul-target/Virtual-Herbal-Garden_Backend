@@ -2,10 +2,12 @@ package com.project.VirtualHerbalPlant.dto;
 
 import com.project.VirtualHerbalPlant.entity.Note;
 import lombok.Builder;
+import lombok.Data;
 import org.bson.types.ObjectId;
 
 import java.time.LocalDateTime;
 @Builder
+@Data
 public class NoteReplydto {
     private String id;
 
